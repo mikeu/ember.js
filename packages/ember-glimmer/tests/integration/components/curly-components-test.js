@@ -25,6 +25,7 @@ import {
   styles
 } from '../../utils/test-helpers';
 import {
+  EMBER_ANGLE_BRACKET_INVOCATION,
   MANDATORY_SETTER
 } from 'ember/features';
 
@@ -3184,5 +3185,29 @@ if (jQueryDisabled) {
       assert.equal($span.attr('class'), 'inner');
     }
 
+  });
+}
+
+
+if (EMBER_ANGLE_BRACKET_INVOCATION) {
+  moduleFor('RFC#311 AngleBracket Ivocation', class extends RenderingTest {
+    ['@test Angle bracket invocation']() {
+      this.registerComponent('foo-bar', {
+        ComponentClass: Component.extend({ name: 'Chad' }),
+        template: 'Hi {{name}}!'
+      });
+
+      this.render('<FooBar />');
+      this.assertText('Hi Chad!');
+    }
+
+    ['@test Angle bracket invocation with arguments']() {
+      this.registerComponent('foo-bar', {
+        template: 'Hi {{@name}}!'
+      });
+
+      this.render('<FooBar @name="Godfrey" />');
+      this.assertText('Hi Godfrey!');
+    }
   });
 }

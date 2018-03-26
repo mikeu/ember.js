@@ -10,7 +10,8 @@
     "ember-module-unification": null,
     "glimmer-custom-component-manager": null,
     "ember-template-block-let-helper": true,
-    "ember-metal-tracked-properties": null
+    "ember-metal-tracked-properties": null,
+    "ember-angle-bracket-invocation": null
   },
   "deprecations": {
     "container-lookupFactory": "2.12.0",
