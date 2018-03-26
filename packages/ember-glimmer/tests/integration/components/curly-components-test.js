@@ -3199,6 +3199,7 @@ if (EMBER_ANGLE_BRACKET_INVOCATION) {
 
       this.render('<FooBar />');
       this.assertText('Hi Chad!');
+      this.assertStableRerender();
     }
 
     ['@test Angle bracket invocation with arguments']() {
@@ -3208,6 +3209,27 @@ if (EMBER_ANGLE_BRACKET_INVOCATION) {
 
       this.render('<FooBar @name="Godfrey" />');
       this.assertText('Hi Godfrey!');
+      this.assertStableRerender();
+    }
+
+    ['@test Angle bracket invocation with yielded block']() {
+      this.registerComponent('foo-bar', {
+        template: '{{yield}}'
+      });
+
+      this.render('<FooBar>Hi Chad!</FooBar>');
+      this.assertText('Hi Chad!');
+      this.assertStableRerender();
+    }
+
+    ['@test Angle bracket invocation with yielded block with block params']() {
+      this.registerComponent('foo-bar', {
+        template: '{{yield "Godfrey"}}'
+      });
+
+      this.render('<FooBar as |name|>Hi {{name}}!</FooBar>');
+      this.assertText('Hi Godfrey!');
+      this.assertStableRerender();
     }
   });
 }
