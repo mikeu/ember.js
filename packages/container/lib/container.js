@@ -95,7 +95,7 @@ export default class Container {
    @method destroy
    */
   destroy() {
-    destroyDestroyables(this);
+    resetCache(this);
     this.isDestroyed = true;
   }
 
@@ -370,7 +370,8 @@ function destroyDestroyables(container) {
   for (let i = 0; i < keys.length; i++) {
     let key = keys[i];
     let value = cache[key];
-
+    delete cache[key];
+    FACTORY_FOR.delete(value);
     if (value.destroy) {
       value.destroy();
     }

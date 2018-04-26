@@ -2232,6 +2232,7 @@ let Route = EmberObject.extend(ActionHandler, Evented, {
   },
 
   willDestroy() {
+    this._topLevelViewTemplate = null;
     this.teardownViews();
   },
 
