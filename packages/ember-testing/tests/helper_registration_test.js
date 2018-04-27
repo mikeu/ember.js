@@ -81,6 +81,7 @@ moduleFor(
 
       unregisterHelper();
 
+      run(App, 'destroy');
       setupApp();
 
       assert.ok(

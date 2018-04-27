@@ -912,6 +912,7 @@ if (!jQueryDisabled) {
     'ember-testing: debugging helpers',
     class extends HelpersApplicationTestCase {
       afterEach() {
+        super.afterEach();
         setDebugFunction('info', originalInfo);
       }
 
