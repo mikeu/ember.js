@@ -184,10 +184,14 @@ if (!jQueryDisabled) {
           injected++;
         });
 
-        this.runTask(() => {
-          this.createApplication();
-          this.application.setupForTesting();
-        });
+        // bind(this) so Babel doesn't leak _this
+        // into the context onInjectHelpers.
+        this.runTask(
+          function() {
+            this.createApplication();
+            this.application.setupForTesting();
+          }.bind(this)
+        );
 
         assert.equal(injected, 0, 'onInjectHelpers are not called before injectTestHelpers');
 
