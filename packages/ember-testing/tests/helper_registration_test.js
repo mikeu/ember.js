@@ -34,6 +34,7 @@ function destroyApp() {
   if (App) {
     run(App, 'destroy');
     App = null;
+    helperContainer = null;
   }
 }
 

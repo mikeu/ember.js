@@ -50,6 +50,7 @@ moduleFor(
     teardown() {
       setTemplates({});
       runDestroy(component);
+      component = null;
     }
 
     ['@test template with data-template-name should add a new template to Ember.TEMPLATES'](
