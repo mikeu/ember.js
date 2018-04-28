@@ -3,6 +3,7 @@ import { backburner, getCurrentRunLoop } from '@ember/runloop';
 import { Simple } from '@glimmer/interfaces';
 import { CURRENT_TAG, VersionedPathReference } from '@glimmer/reference';
 import {
+  ARGS,
   clientBuilder,
   CurriedComponentDefinition,
   curry,
@@ -131,6 +132,8 @@ class RootState {
     this.root = null as any;
     this.result = undefined;
     this.render = undefined as any;
+
+    ARGS.empty({ sp: 0 } as any);
 
     if (result) {
       /*
