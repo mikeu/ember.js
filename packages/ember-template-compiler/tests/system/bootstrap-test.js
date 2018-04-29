@@ -35,7 +35,9 @@ function checkTemplate(templateName, assert) {
   runAppend(component);
 
   assert.equal(qunitFixture.textContent.trim(), 'Tobias takes teamocil', 'template works');
-  runDestroy(component);
+  runDestroy(owner);
+  setTemplates({});
+  fixture = component = null;
 }
 
 moduleFor(
@@ -45,12 +47,6 @@ moduleFor(
       super();
 
       fixture = document.getElementById('qunit-fixture');
-    }
-
-    teardown() {
-      setTemplates({});
-      runDestroy(component);
-      fixture = component = null;
     }
 
     ['@test template with data-template-name should add a new template to Ember.TEMPLATES'](
