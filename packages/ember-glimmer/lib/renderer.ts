@@ -133,7 +133,10 @@ class RootState {
     this.result = undefined;
     this.render = undefined as any;
 
+    // TODO Fix in glimmer-vm
     ARGS.empty({ sp: 0 } as any);
+    // if error is throw the stack isn't reset
+    (ARGS as any).stack.reset();
 
     if (result) {
       /*
