@@ -6,6 +6,43 @@ import { OWNER, setOwner } from 'ember-owner';
 import { assign } from '@ember/polyfills';
 import { dictionary, HAS_NATIVE_PROXY } from 'ember-utils';
 
+let ContainerTracking;
+if (DEBUG) {
+  // requires v8
+  // --js-flags="--track-retaining-path --allow-natives-syntax --expose-gc"
+  try {
+    /* globals gc, WeakSet */
+    if (typeof gc === 'function') {
+      ContainerTracking = (() => {
+        let Containers = new WeakSet();
+        let DebugTrackRetainingPath = new Function(
+          'heapObject',
+          'return %DebugTrackRetainingPath(heapObject, "track-ephemeral-path")'
+        );
+        let GetWeakSetValues = new Function('weakSet', 'return %GetWeakSetValues(weakSet, 0)');
+        return {
+          track(container) {
+            Containers.add(container);
+            DebugTrackRetainingPath(container);
+          },
+          hasContainers() {
+            gc();
+            return GetWeakSetValues(Containers).length > 0;
+          },
+          reset() {
+            let containers = GetWeakSetValues(Containers);
+            for (let i = 0; i < containers.length; i++) {
+              Containers.delete(containers[i]);
+            }
+          },
+        };
+      })();
+    }
+  } catch (e) {
+    // ignore
+  }
+}
+
 /**
  A container used to instantiate and cache objects.
 
@@ -29,6 +66,9 @@ export default class Container {
 
     if (DEBUG) {
       this.validationCache = dictionary(options.validationCache || null);
+      if (ContainerTracking !== undefined) {
+        ContainerTracking.track(this);
+      }
     }
   }
 
@@ -156,6 +196,11 @@ export default class Container {
     return factoryFor(this, normalizedName, fullName);
   }
 }
+
+if (DEBUG) {
+  Container.ContainerTracking = ContainerTracking;
+}
+
 /*
  * Wrap a factory manager in a proxy which will not permit properties to be
  * set on the manager.
